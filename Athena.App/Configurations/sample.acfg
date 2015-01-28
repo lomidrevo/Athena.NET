@@ -1,0 +1,155 @@
+<AthenaConfig>
+
+	<!-- 
+		Output image/window properties
+	
+		attributes: 
+			- saveAfterRendering:bool (default: false)
+			- vSync:enum { Off, On, Adaptive }	(default: Off)
+			- fullscreen:bool (default: false)
+		child nodes:
+			- Resolution:Vector2i
+			- Filename:string (default: app.config:DefaultOutputDirectory\yyyyddMM.HHmmss.athena.output.png)
+	-->
+	<Output saveAfterRendering="true" vSync="Adaptive" fullscreen="false" >
+		<Resolution width="960" height="540" />
+		<Filename></Filename>
+	</Output>
+
+	<!-- 
+		Rendering properties
+	
+		attributes: 
+			- framesToRender:int (default: infinite/0)
+			- waitForOutputRedraw:bool - if true, window is redrawn only after whole frame was rendered (default: false)
+			- threads:int - number of available threads in thread pool, must be >= as number of CPU cores, 0 means number of CPU cores will be used
+		child nodes:
+			- JobCount:Vector2i
+			- RayTracer
+			- Background
+	-->
+	<Rendering framesToRender="0" waitForOutputRedraw="true" threads="0" >
+		<JobCount width="16" height="9" />
+		
+		<!--
+			RayTracer properties
+			
+			attributes:
+				- maxOctreeDepth:int - depth to which will raytracer try to go in case of octrees (default: 8)
+		-->
+		<RayTracer maxOctreeDepth="10" />
+
+		<!-- 
+			Background properties
+	
+			attributes: 
+				- useRayDirectionVector:bool - color of background will be based on ray direction vector, child element Color is ignored in this mode (default: false)
+			child nodes:
+				- Color:ColorRGB (default: Black)
+		-->
+		<Background useRayDirectionVector="true">
+			<Color r=",05" g=",05" b=",05" />
+		</Background>
+
+	</Rendering>
+
+	<!-- 
+		Scene properties
+	
+		attributes:
+			- name:string
+		child nodes:
+			- VoxelOctree
+			- Camera
+			- Objects - list of objects in scene [Mesh, Sphere, OmniLight]
+	-->
+	<Scene>
+		
+		<!--
+			Voxel octree properties for whole scene (can also be overriden by each object individualy, in which case this one is ignored)
+			
+			attributes:
+				- maxDepth:int (default: 8)
+				- voxelSizeThreshold:float (default: 1)
+				- generateOnMultipleThreads:bool (default: false)
+		-->
+		<VoxelOctree maxDepth="8" voxelSizeThreshold="0,01" generateOnMultipleThreads="true" />
+
+		<!-- 
+			Camera properties	
+			
+			attributes: 
+				- fov:float - field of vision (default: 45)
+			child nodes:
+				- Position:Vector3
+				- Target:Vector3
+				- MovementSpeed:Vector3 (default: [1,1,1])
+				- RotationSpeed:Vector3 (default: [1,1,1])
+		-->
+		<Camera fov="45">
+			<Position x="500" y="0" z="0" />
+			<Target x="0" y="0" z="0" />
+			<MovementSpeed x="1" y="1" z="1" />
+			<RotationSpeed x=",1" y=",1" z=",1" />
+		</Camera>
+
+		<!--
+			List of objects in scene
+		-->
+		<Objects>
+
+			<!--<OmniLight radius="1" intensity="100">
+				<Position x="100" y="200" z="0" />
+				<Color r="1" g="1" b="1" />
+			</OmniLight>
+
+			<Sphere radius="40" voxelize="false">
+				<Position x="-150" y="0" z="0" />
+			</Sphere>-->
+
+			<Sphere radius="80" voxelize="true">
+				<Position x="0" y="0" z="0" />
+			</Sphere>
+
+			<Sphere radius="40" voxelize="false">
+				<Position x="150" y="0" z="0" />
+			</Sphere>
+
+			<!-- 
+			<WavefrontObjMesh name="Box01">
+				<Position x="0" y="0" z="0" />
+				<Filename>.\Meshes\box.obj</Filename>
+			</WavefrontObjMesh>
+			-->
+
+			<!-- 
+			<WavefrontObjMesh name="Teapot01">
+				<Position x="0" y="-50" z="0" />
+				<Filename>.\Meshes\teapot.obj</Filename>
+			</WavefrontObjMesh>
+			-->
+
+			<!-- 
+			<Terrain generationMethod="MidPointDisplacement" size="512" maxHeight="128" >
+				<MidPointDisplacement size="32" roughness="10" seed="13" />
+				<Position x="0" y="0" z="0" />
+			</Terrain>
+			-->
+			
+		</Objects>
+
+	</Scene>
+
+	<!--
+		Log properties
+	
+		attributes:
+			- minLogLevel:enum { Anything, Debug, Info, Warning, Error, Nothing } (default: Anything)
+		child nodes:
+			- Filename (default: app.config:DefaultLogDirectory\yyyyddMM.HHmmss.athena.log)
+	-->
+	<Log minLogLevel="Anything">
+		<Filename></Filename>
+	</Log>
+	
+</AthenaConfig>
